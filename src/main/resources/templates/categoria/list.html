@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title-text}, ~{::main-content})}">
+<th:block th:fragment="title-text">Categorías</th:block>
+<th:block th:fragment="main-content">
+<div class="card">
+  <div class="card-header">
+    <h2>🏷️ Categorías</h2>
+    <a th:href="@{/categorias/nueva}" class="btn btn-accent btn-sm">+ Nueva</a>
+  </div>
+  <div class="card-body">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>#</th><th>Nombre</th><th>Rango Edad</th><th>Descripción</th><th>Acciones</th></tr></thead>
+        <tbody>
+          <tr th:each="c : ${categorias}">
+            <td th:text="${c.id}"></td>
+            <td th:text="${c.nombre}"></td>
+            <td th:text="${c.rangoEdad}"></td>
+            <td th:text="${c.descripcion}"></td>
+            <td style="display:flex;gap:.5rem">
+              <a th:href="@{/categorias/editar/{id}(id=${c.id})}" class="btn btn-outline btn-sm">✏️ Editar</a>
+              <form th:action="@{/categorias/eliminar/{id}(id=${c.id})}" method="post" onsubmit="return confirm('¿Eliminar?')">
+                <button type="submit" class="btn btn-danger btn-sm">🗑️</button>
+              </form>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(categorias)}"><td colspan="5" style="text-align:center;color:#888;padding:2rem">Sin categorías registradas</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</th:block>
+</html>

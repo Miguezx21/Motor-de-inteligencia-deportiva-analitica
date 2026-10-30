@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title-text}, ~{::main-content})}">
+<th:block th:fragment="title-text">Dashboard</th:block>
+<th:block th:fragment="main-content">
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-number">⛸️</div><div class="stat-label">Atletas</div></div>
+    <div class="stat-card"><div class="stat-number">👨‍🏫</div><div class="stat-label">Entrenadores</div></div>
+    <div class="stat-card"><div class="stat-number">📋</div><div class="stat-label">Sesiones</div></div>
+    <div class="stat-card"><div class="stat-number">🏷️</div><div class="stat-label">Categorías</div></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><h2>⛸️ Bienvenido al Panel Administrativo JEMPE</h2></div>
+    <div class="card-body">
+      <p>Sistema de Gestión del Club JEMPE — Patinaje de Velocidad · Quito, Ecuador</p>
+      <br>
+      <p>Usa el menú lateral para administrar:</p>
+      <ul style="margin:1rem 0 0 1.5rem;line-height:2">
+        <li><strong>Categorías y Disciplinas</strong> — Configura las modalidades del club</li>
+        <li><strong>Entrenadores</strong> — Registra al staff técnico</li>
+        <li><strong>Padres / Tutores</strong> — Gestiona el contacto familiar</li>
+        <li><strong>Atletas</strong> — Registro con validación de cédula ecuatoriana (Módulo 10)</li>
+        <li><strong>Sesiones</strong> — Planifica entrenamientos y asigna atletas</li>
+      </ul>
+    </div>
+  </div>
+</th:block>
+</html>

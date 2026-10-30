@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(title, content)">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${title} + ' — JEMPE Admin'">JEMPE Admin</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="logo-icon">⛸️</div>
+    <h1>JEMPE</h1>
+    <p>Panel Administrativo</p>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">Principal</div>
+    <a th:href="@{/dashboard}" th:classappend="${#httpServletRequest.requestURI == '/dashboard'} ? 'active'"><span class="nav-icon">📊</span> Dashboard</a>
+    <div class="nav-section-title">Configuración</div>
+    <a th:href="@{/categorias}" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI,'/categorias')} ? 'active'"><span class="nav-icon">🏷️</span> Categorías</a>
+    <a th:href="@{/disciplinas}" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI,'/disciplinas')} ? 'active'"><span class="nav-icon">🎯</span> Disciplinas</a>
+    <div class="nav-section-title">Personas</div>
+    <a th:href="@{/entrenadores}" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI,'/entrenadores')} ? 'active'"><span class="nav-icon">👨‍🏫</span> Entrenadores</a>
+    <a th:href="@{/padres}" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI,'/padres')} ? 'active'"><span class="nav-icon">👪</span> Padres / Tutores</a>
+    <a th:href="@{/atletas}" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI,'/atletas')} ? 'active'"><span class="nav-icon">⛸️</span> Atletas</a>
+    <div class="nav-section-title">Operación</div>
+    <a th:href="@{/sesiones}" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI,'/sesiones')} ? 'active'"><span class="nav-icon">📋</span> Sesiones</a>
+  </nav>
+  <div class="sidebar-footer">Club JEMPE · Quito · v1.0</div>
+</aside>
+<div class="main-wrapper">
+  <header class="topbar">
+    <span class="topbar-title" th:text="${title}">Título</span>
+    <div class="topbar-user">
+      <span sec:authentication="name">Usuario</span>
+      <span>·</span>
+      <a th:href="@{/logout}">Cerrar sesión</a>
+    </div>
+  </header>
+  <main class="page-content">
+    <div th:if="${exito}" class="alert alert-success">✓ <span th:text="${exito}"></span></div>
+    <div th:if="${error}"  class="alert alert-danger">⚠️ <span th:text="${error}"></span></div>
+    <th:block th:replace="${content}"/>
+  </main>
+</div>
+<script th:src="@{/js/cascading.js}"></script>
+</body>
+</html>

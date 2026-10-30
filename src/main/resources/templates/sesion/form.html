@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title-text}, ~{::main-content})}">
+<th:block th:fragment="title-text" th:text="${sesion.id == null} ? 'Nueva Sesión' : 'Editar Sesión'">Sesión</th:block>
+<th:block th:fragment="main-content">
+<div class="card">
+  <div class="card-header">
+    <h2 th:text="${sesion.id == null} ? '📋 Nueva Sesión' : '✏️ Editar Sesión'"></h2>
+    <a th:href="@{/sesiones}" class="btn btn-outline btn-sm" style="color:#fff;border-color:#fff">← Volver</a>
+  </div>
+  <div class="card-body">
+    <form th:action="@{/sesiones/guardar}" th:object="${sesion}" method="post">
+      <input type="hidden" th:field="*{id}">
+      <div class="form-grid-2">
+        <div class="form-group" style="grid-column:span 2">
+          <label class="form-label">Nombre de la Sesión <span style="color:#dc3545">*</span></label>
+          <input class="form-control" th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'" type="text" th:field="*{nombre}" placeholder="Ej: Entrenamiento Sprint – Semana 1">
+          <span class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Entrenador <span style="color:#dc3545">*</span></label>
+          <select class="form-control" th:field="*{entrenador.id}">
+            <option value="">— Seleccione entrenador —</option>
+            <option th:each="e : ${entrenadores}" th:value="${e.id}"
+                    th:text="${e.nombre} + ' ' + ${e.apellido}"
+                    th:selected="${sesion.entrenador?.id == e.id}"></option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Estado</label>
+          <select class="form-control" th:field="*{estado}">
+            <option value="PLANIFICADA">Planificada</option>
+            <option value="EN_CURSO">En Curso</option>
+            <option value="COMPLETADA">Completada</option>
+            <option value="CANCELADA">Cancelada</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fecha y Hora de Inicio <span style="color:#dc3545">*</span></label>
+          <input class="form-control" th:classappend="${#fields.hasErrors('fechaInicio')} ? 'is-invalid'" type="datetime-local" th:field="*{fechaInicio}">
+          <span class="invalid-feedback" th:if="${#fields.hasErrors('fechaInicio')}" th:errors="*{fechaInicio}"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fecha y Hora de Fin</label>
+          <input class="form-control" type="datetime-local" th:field="*{fechaFin}">
+        </div>
+        <div class="form-group" style="grid-column:span 2">
+          <label class="form-label">Ubicación</label>
+          <input class="form-control" type="text" th:field="*{ubicacion}" placeholder="Ej: Pista principal JEMPE – Quito">
+        </div>
+        <div class="form-group" style="grid-column:span 2">
+          <label class="form-label">Observaciones</label>
+          <textarea class="form-control" th:field="*{observaciones}" rows="2" placeholder="Notas adicionales..."></textarea>
+        </div>
+
+        <!-- Multi-select de atletas (No es un input manual; son checkboxes de atletas reales) -->
+        <div class="form-group" style="grid-column:span 2">
+          <label class="form-label">Atletas Asignados</label>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.5rem;border:1px solid #dde3ec;border-radius:6px;padding:1rem;max-height:220px;overflow-y:auto">
+            <label th:each="a : ${atletasActivos}" style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;cursor:pointer">
+              <input type="checkbox" name="atletaIds" th:value="${a.id}"
+                     th:checked="${sesion.atletas != null and #lists.contains(sesion.atletas.![id], a.id)}">
+              <span th:text="${a.nombre} + ' ' + ${a.apellido}"></span>
+            </label>
+            <p th:if="${#lists.isEmpty(atletasActivos)}" style="color:#888;font-size:.83rem">Sin atletas activos registrados</p>
+          </div>
+          <span class="form-hint">Selecciona los atletas que participarán en esta sesión.</span>
+        </div>
+      </div>
+      <div style="display:flex;gap:1rem;margin-top:1.5rem">
+        <button type="submit" class="btn btn-accent">💾 Guardar Sesión</button>
+        <a th:href="@{/sesiones}" class="btn btn-outline">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+</th:block>
+</html>

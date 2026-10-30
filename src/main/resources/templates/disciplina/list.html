@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title-text}, ~{::main-content})}">
+<th:block th:fragment="title-text">Disciplinas</th:block>
+<th:block th:fragment="main-content">
+<div class="card">
+  <div class="card-header"><h2>🎯 Disciplinas</h2><a th:href="@{/disciplinas/nueva}" class="btn btn-accent btn-sm">+ Nueva</a></div>
+  <div class="card-body">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>#</th><th>Nombre</th><th>Categoría</th><th>Descripción</th><th>Acciones</th></tr></thead>
+        <tbody>
+          <tr th:each="d : ${disciplinas}">
+            <td th:text="${d.id}"></td><td th:text="${d.nombre}"></td>
+            <td th:text="${d.categoria?.nombre}"></td><td th:text="${d.descripcion}"></td>
+            <td style="display:flex;gap:.5rem">
+              <a th:href="@{/disciplinas/editar/{id}(id=${d.id})}" class="btn btn-outline btn-sm">✏️</a>
+              <form th:action="@{/disciplinas/eliminar/{id}(id=${d.id})}" method="post" onsubmit="return confirm('¿Eliminar?')">
+                <button type="submit" class="btn btn-danger btn-sm">🗑️</button>
+              </form>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(disciplinas)}"><td colspan="5" style="text-align:center;color:#888;padding:2rem">Sin disciplinas</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</th:block>
+</html>

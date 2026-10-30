@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title-text}, ~{::main-content})}">
+<th:block th:fragment="title-text">Sesiones</th:block>
+<th:block th:fragment="main-content">
+<div class="card">
+  <div class="card-header"><h2>📋 Sesiones de Entrenamiento</h2><a th:href="@{/sesiones/nueva}" class="btn btn-accent btn-sm">+ Nueva</a></div>
+  <div class="card-body">
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Nombre</th><th>Entrenador</th><th>Inicio</th><th>Fin</th><th>Ubicación</th><th>Estado</th><th>Atletas</th><th>Acciones</th></tr></thead>
+        <tbody>
+          <tr th:each="s : ${sesiones}">
+            <td th:text="${s.nombre}"></td>
+            <td th:text="${s.entrenador?.nombre} + ' ' + ${s.entrenador?.apellido}"></td>
+            <td th:text="${s.fechaInicio}"></td>
+            <td th:text="${s.fechaFin}"></td>
+            <td th:text="${s.ubicacion}"></td>
+            <td><span class="badge badge-info" th:text="${s.estado}"></span></td>
+            <td th:text="${s.atletas?.size()} + ' atleta(s)'"></td>
+            <td style="display:flex;gap:.5rem">
+              <a th:href="@{/sesiones/editar/{id}(id=${s.id})}" class="btn btn-outline btn-sm">✏️</a>
+              <form th:action="@{/sesiones/eliminar/{id}(id=${s.id})}" method="post" onsubmit="return confirm('¿Eliminar sesión?')">
+                <button type="submit" class="btn btn-danger btn-sm">🗑️</button>
+              </form>
+            </td>
+          </tr>
+          <tr th:if="${#lists.isEmpty(sesiones)}"><td colspan="8" style="text-align:center;color:#888;padding:2rem">Sin sesiones registradas</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</th:block>
+</html>
