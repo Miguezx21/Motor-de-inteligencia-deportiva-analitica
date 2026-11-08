@@ -1,5 +1,6 @@
 package com.jempe.admin.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +16,18 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Value("${app.admin.user}")
+    private String adminUser;
+
+    @Value("${app.admin.password}")
+    private String adminPassword;
+
+    @Value("${app.entrenador.user}")
+    private String entrenadorUser;
+
+    @Value("${app.entrenador.password}")
+    private String entrenadorPassword;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -23,16 +36,16 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder encoder) {
         var admin = User.builder()
-                .username("admin")
-                .password(encoder.encode("jempe2024"))
+                .username(adminUser)
+                .password(encoder.encode(adminPassword))
                 .roles("ADMIN")
                 .build();
-        var alexis = User.builder()
-                .username("alexis")
-                .password(encoder.encode("jempe2024"))
+        var entrenador = User.builder()
+                .username(entrenadorUser)
+                .password(encoder.encode(entrenadorPassword))
                 .roles("ENTRENADOR")
                 .build();
-        return new InMemoryUserDetailsManager(admin, alexis);
+        return new InMemoryUserDetailsManager(admin, entrenador);
     }
 
     @Bean

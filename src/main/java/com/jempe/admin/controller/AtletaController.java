@@ -26,7 +26,7 @@ public class AtletaController {
 
     @GetMapping
     public String list(Model model) {
-        model.addAttribute("atletas", service.findAll());
+        model.addAttribute("atletas", service.findAllConRelaciones());
         return "atleta/list";
     }
 
@@ -55,7 +55,7 @@ public class AtletaController {
         }
         try {
             service.save(atleta);
-            ra.addFlashAttribute("exito", "Atleta guardado. Cédula validada correctamente (Módulo 10).");
+            ra.addFlashAttribute("exito", "Atleta guardado correctamente.");
         } catch (IllegalArgumentException ex) {
             model.addAttribute("error", ex.getMessage());
             populateForm(model);

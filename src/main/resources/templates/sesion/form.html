@@ -46,14 +46,16 @@
         </div>
         <div class="form-group" style="grid-column:span 2">
           <label class="form-label">Ubicación</label>
-          <input class="form-control" type="text" th:field="*{ubicacion}" placeholder="Ej: Pista principal JEMPE – Quito">
+          <select class="form-control" th:field="*{ubicacion}">
+            <option value="">— Seleccione ubicación —</option>
+            <option value="Pista Patinaje CDP">Pista Patinaje CDP</option>
+            <option value="Circuito Cotocollao">Circuito Cotocollao</option>
+          </select>
         </div>
         <div class="form-group" style="grid-column:span 2">
           <label class="form-label">Observaciones</label>
           <textarea class="form-control" th:field="*{observaciones}" rows="2" placeholder="Notas adicionales..."></textarea>
         </div>
-
-        <!-- Multi-select de atletas (No es un input manual; son checkboxes de atletas reales) -->
         <div class="form-group" style="grid-column:span 2">
           <label class="form-label">Atletas Asignados</label>
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.5rem;border:1px solid #dde3ec;border-radius:6px;padding:1rem;max-height:220px;overflow-y:auto">

@@ -11,37 +11,39 @@
 <body>
 <aside class="sidebar">
   <div class="sidebar-brand">
-    <div class="logo-icon">⛸️</div>
-    <h1>JEMPE</h1>
-    <p>Panel Administrativo</p>
+    <img th:src="@{/img/logo.png}" alt="JEMPE" class="sidebar-logo" onerror="this.style.display='none'">
+    <p class="sidebar-subtitle">Panel Administrativo</p>
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section-title">Principal</div>
-    <a th:href="@{/dashboard}" th:classappend="${#httpServletRequest.requestURI == '/dashboard'} ? 'active'"><span class="nav-icon">📊</span> Dashboard</a>
+    <a th:href="@{/dashboard}" th:classappend="${currentUri != null and currentUri == '/dashboard'} ? 'active'">Dashboard</a>
     <div class="nav-section-title">Configuración</div>
-    <a th:href="@{/categorias}" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI,'/categorias')} ? 'active'"><span class="nav-icon">🏷️</span> Categorías</a>
-    <a th:href="@{/disciplinas}" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI,'/disciplinas')} ? 'active'"><span class="nav-icon">🎯</span> Disciplinas</a>
+    <a th:href="@{/categorias}" th:classappend="${currentUri != null and #strings.startsWith(currentUri,'/categorias')} ? 'active'">Categorías</a>
+
     <div class="nav-section-title">Personas</div>
-    <a th:href="@{/entrenadores}" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI,'/entrenadores')} ? 'active'"><span class="nav-icon">👨‍🏫</span> Entrenadores</a>
-    <a th:href="@{/padres}" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI,'/padres')} ? 'active'"><span class="nav-icon">👪</span> Padres / Tutores</a>
-    <a th:href="@{/atletas}" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI,'/atletas')} ? 'active'"><span class="nav-icon">⛸️</span> Atletas</a>
+    <a th:href="@{/entrenadores}" th:classappend="${currentUri != null and #strings.startsWith(currentUri,'/entrenadores')} ? 'active'">Entrenadores</a>
+    <a th:href="@{/padres}" th:classappend="${currentUri != null and #strings.startsWith(currentUri,'/padres')} ? 'active'">Padres / Tutores</a>
+    <a th:href="@{/atletas}" th:classappend="${currentUri != null and #strings.startsWith(currentUri,'/atletas')} ? 'active'">Atletas</a>
     <div class="nav-section-title">Operación</div>
-    <a th:href="@{/sesiones}" th:classappend="${#strings.startsWith(#httpServletRequest.requestURI,'/sesiones')} ? 'active'"><span class="nav-icon">📋</span> Sesiones</a>
+    <a th:href="@{/sesiones}" th:classappend="${currentUri != null and #strings.startsWith(currentUri,'/sesiones')} ? 'active'">Sesiones</a>
   </nav>
   <div class="sidebar-footer">Club JEMPE · Quito · v1.0</div>
 </aside>
 <div class="main-wrapper">
   <header class="topbar">
-    <span class="topbar-title" th:text="${title}">Título</span>
+    <span class="topbar-title"><th:block th:replace="${title}"/></span>
     <div class="topbar-user">
       <span sec:authentication="name">Usuario</span>
-      <span>·</span>
-      <a th:href="@{/logout}">Cerrar sesión</a>
+      <span class="topbar-sep">·</span>
+      <form th:action="@{/logout}" method="post" style="display:inline;margin:0">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button type="submit" class="logout-btn">Cerrar sesión</button>
+      </form>
     </div>
   </header>
   <main class="page-content">
     <div th:if="${exito}" class="alert alert-success">✓ <span th:text="${exito}"></span></div>
-    <div th:if="${error}"  class="alert alert-danger">⚠️ <span th:text="${error}"></span></div>
+    <div th:if="${error}"  class="alert alert-danger">⚠ <span th:text="${error}"></span></div>
     <th:block th:replace="${content}"/>
   </main>
 </div>

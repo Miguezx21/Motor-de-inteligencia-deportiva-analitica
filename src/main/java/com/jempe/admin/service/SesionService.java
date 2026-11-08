@@ -14,6 +14,7 @@ public class SesionService {
     private final AtletaRepository atletaRepo;
 
     public List<Sesion> findAll() { return repo.findAllConEntrenador(); }
+    public List<Sesion> findAllConRelaciones() { return repo.findAllConRelaciones(); }
     public Optional<Sesion> findById(Long id) { return repo.findById(id); }
 
     public Sesion save(Sesion sesion, List<Long> atletaIds) {

@@ -15,8 +15,8 @@ public class AtletaService {
     public List<Atleta> findAll() { return repo.findAll(); }
     public Optional<Atleta> findById(Long id) { return repo.findById(id); }
     public List<Atleta> findAllActivos() { return repo.findAllActivos(); }
+    public List<Atleta> findAllConRelaciones() { return repo.findAllConRelaciones(); }
 
-    /** VALIDACIÓN BACK-END: Cédula Ecuatoriana (Módulo 10) */
     public Atleta save(Atleta atleta) {
         cedulaValidator.validarOLanzar(atleta.getCedula());
         if (atleta.getId() == null && repo.existsByCedula(atleta.getCedula()))

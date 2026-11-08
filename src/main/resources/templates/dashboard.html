@@ -4,10 +4,22 @@
 <th:block th:fragment="title-text">Dashboard</th:block>
 <th:block th:fragment="main-content">
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-number">⛸️</div><div class="stat-label">Atletas</div></div>
-    <div class="stat-card"><div class="stat-number">👨‍🏫</div><div class="stat-label">Entrenadores</div></div>
-    <div class="stat-card"><div class="stat-number">📋</div><div class="stat-label">Sesiones</div></div>
-    <div class="stat-card"><div class="stat-number">🏷️</div><div class="stat-label">Categorías</div></div>
+    <div class="stat-card">
+      <div class="stat-number" th:text="${totalAtletas}">0</div>
+      <div class="stat-label">Atletas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" th:text="${totalEntrenadores}">0</div>
+      <div class="stat-label">Entrenadores</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" th:text="${totalSesiones}">0</div>
+      <div class="stat-label">Sesiones</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" th:text="${totalCategorias}">0</div>
+      <div class="stat-label">Categorías</div>
+    </div>
   </div>
   <div class="card">
     <div class="card-header"><h2>⛸️ Bienvenido al Panel Administrativo JEMPE</h2></div>

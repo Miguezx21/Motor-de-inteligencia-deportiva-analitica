@@ -30,6 +30,9 @@ public class Atleta {
     @Column(name = "fecha_nacimiento", nullable = false)
     private LocalDate fechaNacimiento;
 
+    @Column(length = 20)
+    private String especialidad; // "Velocidad" o "Fondo" — opcional
+
     @Column(precision = 5)
     private Double peso;
 
@@ -43,8 +46,8 @@ public class Atleta {
     private Boolean activo = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "disciplina_id", nullable = false)
-    private Disciplina disciplina;
+    @JoinColumn(name = "categoria_id", nullable = false)
+    private Categoria categoria;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "padre_tutor_id")

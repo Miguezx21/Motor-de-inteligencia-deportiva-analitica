@@ -1,20 +1,21 @@
+# Maven
 target/
-*.class
 *.jar
 *.war
-.mvn/wrapper/maven-wrapper.jar
+*.class
+
+# Variables de entorno — NUNCA a Git
+.env
+
+# IDE
+.vscode/settings.json
 .idea/
 *.iml
-.vscode/
-*.swp
-*.swo
+
+# OS
 .DS_Store
 Thumbs.db
+
+# Logs
 *.log
 logs/
-spring-boot-*.jar
-*.db
-*.mv.db
-*.trace.db
-.env
-application-prod.properties

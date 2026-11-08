@@ -22,5 +22,5 @@ public class Categoria {
     private String rangoEdad;
 
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Disciplina> disciplinas;
+    private List<Atleta> atletas;
 }

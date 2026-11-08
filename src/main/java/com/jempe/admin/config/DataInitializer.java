@@ -17,7 +17,6 @@ import java.util.List;
 public class DataInitializer implements CommandLineRunner {
 
     private final CategoriaRepository categoriaRepository;
-    private final DisciplinaRepository disciplinaRepository;
     private final EntrenadorRepository entrenadorRepository;
     private final PadreTutorRepository padreTutorRepository;
     private final AtletaRepository atletaRepository;
@@ -31,29 +30,23 @@ public class DataInitializer implements CommandLineRunner {
         }
         log.info("DataInitializer: cargando datos de demostración...");
 
-        Categoria subInfantil = new Categoria();
-        subInfantil.setNombre("Sub-10");
-        subInfantil.setRangoEdad("8-10 años");
-        subInfantil.setDescripcion("Categoría infantil – iniciación al patinaje de velocidad");
+        // Categorías WSA (World Skate America) — Clubes Mayores 2026
+        Categoria prejuvenil = new Categoria();
+        prejuvenil.setNombre("Prejuvenil");
+        prejuvenil.setRangoEdad("14 años");
+        prejuvenil.setDescripcion("Categoría Prejuvenil WSA — 14 años");
 
-        Categoria subJuvenil = new Categoria();
-        subJuvenil.setNombre("Sub-16");
-        subJuvenil.setRangoEdad("13-16 años");
-        subJuvenil.setDescripcion("Categoría juvenil – formación técnico-táctica");
+        Categoria juvenil = new Categoria();
+        juvenil.setNombre("Juvenil");
+        juvenil.setRangoEdad("15-17 años");
+        juvenil.setDescripcion("Categoría Juvenil WSA — 15 a 17 años");
 
-        Categoria elite = new Categoria();
-        elite.setNombre("Elite");
-        elite.setRangoEdad("17+ años");
-        elite.setDescripcion("Categoría élite – competencia de alto rendimiento");
+        Categoria mayores = new Categoria();
+        mayores.setNombre("Mayores");
+        mayores.setRangoEdad("18+ años");
+        mayores.setDescripcion("Categoría Mayores WSA — 18 años en adelante");
 
-        categoriaRepository.saveAll(List.of(subInfantil, subJuvenil, elite));
-
-        Disciplina d300    = crearDisc("300m Sprint",   "Prueba corta de velocidad",       subInfantil);
-        Disciplina d500    = crearDisc("500m",          "Prueba clásica de velocidad",      subJuvenil);
-        Disciplina d1000   = crearDisc("1000m",         "Prueba de fondo medio",            subJuvenil);
-        Disciplina d5000   = crearDisc("5000m Puntos",  "Prueba de puntos – élite",         elite);
-        Disciplina maraton = crearDisc("Maratón",       "42km – máxima exigencia aeróbica", elite);
-        disciplinaRepository.saveAll(List.of(d300, d500, d1000, d5000, maraton));
+        categoriaRepository.saveAll(List.of(prejuvenil, juvenil, mayores));
 
         Entrenador alexis = new Entrenador();
         alexis.setCedula("1723456789");
@@ -74,37 +67,33 @@ public class DataInitializer implements CommandLineRunner {
         papa.setTelefono("+593 98 765 4321");
         padreTutorRepository.save(papa);
 
-        Atleta a1 = crearAtleta("1745678901", "Sofía",    "Mendoza", d500,  papa);
-        Atleta a2 = crearAtleta("1767890123", "Diego",    "Ruiz",    d1000, null);
-        Atleta a3 = crearAtleta("1789012345", "Valentina","López",   d5000, null);
+        Atleta a1 = crearAtleta("1745678901", "Sofía",     "Mendoza", juvenil,    papa,  "Velocidad", LocalDate.of(2010, 3, 15));
+        Atleta a2 = crearAtleta("1767890123", "Diego",     "Ruiz",    juvenil,    null,  "Fondo",     LocalDate.of(2009, 7, 22));
+        Atleta a3 = crearAtleta("1789012345", "Valentina", "López",   mayores,    null,  "Velocidad", LocalDate.of(2005, 1, 10));
         atletaRepository.saveAll(List.of(a1, a2, a3));
 
         Sesion sesion = new Sesion();
         sesion.setNombre("Entrenamiento Sprint – Semana 1");
         sesion.setEntrenador(alexis);
-        sesion.setFechaInicio(LocalDateTime.now().plusDays(1).withHour(8).withMinute(0).withSecond(0));
-        sesion.setFechaFin(LocalDateTime.now().plusDays(1).withHour(10).withMinute(0).withSecond(0));
+        sesion.setFechaInicio(LocalDateTime.now().plusDays(1).withHour(8).withMinute(0).withSecond(0).withNano(0));
+        sesion.setFechaFin(LocalDateTime.now().plusDays(1).withHour(10).withMinute(0).withSecond(0).withNano(0));
         sesion.setUbicacion("Pista principal JEMPE – Quito");
         sesion.setEstado("PLANIFICADA");
         sesion.setAtletas(List.of(a1, a2));
         sesionRepository.save(sesion);
 
-        log.info("Seed OK → {} categorías, {} disciplinas, {} atletas, 1 sesión",
-                categoriaRepository.count(), disciplinaRepository.count(), atletaRepository.count());
-    }
-
-    private Disciplina crearDisc(String nombre, String desc, Categoria cat) {
-        Disciplina d = new Disciplina();
-        d.setNombre(nombre); d.setDescripcion(desc); d.setCategoria(cat);
-        return d;
+        log.info("Seed OK → {} categorías, {} atletas, 1 sesión",
+                categoriaRepository.count(), atletaRepository.count());
     }
 
     private Atleta crearAtleta(String cedula, String nombre, String apellido,
-                                Disciplina disc, PadreTutor padre) {
+                                Categoria categoria, PadreTutor padre,
+                                String especialidad, LocalDate nacimiento) {
         Atleta a = new Atleta();
         a.setCedula(cedula); a.setNombre(nombre); a.setApellido(apellido);
-        a.setDisciplina(disc); a.setPadreTutor(padre);
-        a.setFechaNacimiento(LocalDate.of(2008, 3, 15));
+        a.setCategoria(categoria); a.setPadreTutor(padre);
+        a.setEspecialidad(especialidad);
+        a.setFechaNacimiento(nacimiento);
         a.setActivo(true);
         return a;
     }

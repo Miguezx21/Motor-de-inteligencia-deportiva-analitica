@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: jempe-admin
+    runtime: java
+    plan: free
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/jempe-admin-1.0.0.jar
+    healthCheckPath: /login
+    envVars:
+      - key: DB_URL
+        fromDatabase:
+          name: jempe-db
+          property: connectionString
+      - key: DB_DRIVER
+        value: org.postgresql.Driver
+      - key: DB_USERNAME
+        fromDatabase:
+          name: jempe-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: jempe-db
+          property: password
+      - key: JPA_DDL_AUTO
+        value: update
+      - key: H2_CONSOLE_ENABLED
+        value: "false"
+      - key: ADMIN_USER
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ENTRENADOR_USER
+        sync: false
+      - key: ENTRENADOR_PASSWORD
+        sync: false
+
+databases:
+  - name: jempe-db
+    plan: free
+    databaseName: jempe

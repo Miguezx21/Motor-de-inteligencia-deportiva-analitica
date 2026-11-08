@@ -64,6 +64,8 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px;
 .topbar-title { font-weight: 600; font-size: 1rem; color: var(--primary); }
 .topbar-user  { font-size: .82rem; color: var(--text-muted); display: flex; gap: .5rem; align-items: center; }
 .topbar-user a { color: var(--accent); text-decoration: none; font-weight: 500; }
+.logout-btn { background: none; border: none; cursor: pointer; color: var(--accent); font-size: .82rem; font-weight: 500; font-family: inherit; padding: 0; text-decoration: none; }
+.logout-btn:hover { text-decoration: underline; }
 
 .page-content { padding: 1.5rem; flex: 1; max-width: 1200px; }
 
@@ -134,3 +136,21 @@ select.form-control { appearance: auto; }
 .logo-big { font-size: 3rem; }
 .login-logo h1 { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
 .login-logo p  { font-size: .8rem; color: var(--text-muted); margin-top: .25rem; }
+
+.sidebar-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 6px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.12);
+  padding: 6px;
+}
+.sidebar-subtitle {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  margin: 0;
+  letter-spacing: 0.5px;
+}

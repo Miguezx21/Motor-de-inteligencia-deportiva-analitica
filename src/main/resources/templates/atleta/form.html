@@ -5,43 +5,41 @@
 <th:block th:fragment="main-content">
 <div class="card">
   <div class="card-header">
-    <h2 th:text="${atleta.id == null} ? '⛸️ Registrar Atleta' : '✏️ Editar Atleta'"></h2>
+    <h2 th:text="${atleta.id == null} ? 'Registrar Atleta' : 'Editar Atleta'"></h2>
     <a th:href="@{/atletas}" class="btn btn-outline btn-sm" style="color:#fff;border-color:#fff">← Volver</a>
   </div>
   <div class="card-body">
     <form th:action="@{/atletas/guardar}" th:object="${atleta}" method="post" novalidate>
       <input type="hidden" th:field="*{id}">
 
-      <!-- CASCADING DROPDOWN #1: Categoría → Disciplina -->
-      <h3 style="margin-bottom:1rem;color:#1a3a5c;font-size:.9rem;text-transform:uppercase;letter-spacing:1px">📌 Clasificación Deportiva</h3>
+      <h3 style="margin-bottom:1rem;color:#1a3a5c;font-size:.9rem;text-transform:uppercase;letter-spacing:1px">Clasificación Deportiva</h3>
       <div class="form-grid-2">
         <div class="form-group">
           <label class="form-label">Categoría <span style="color:#dc3545">*</span></label>
-          <select class="form-control" id="categoriaSelect" name="categoriaSelectHelper">
+          <select class="form-control" th:field="*{categoria.id}">
             <option value="">— Seleccione categoría —</option>
-            <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}"
-                    th:selected="${atleta.disciplina != null and atleta.disciplina.categoria != null and atleta.disciplina.categoria.id == cat.id}"></option>
+            <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre} + ' (' + ${cat.rangoEdad} + ')'"></option>
           </select>
-          <span class="form-hint">Elige la categoría para filtrar disciplinas disponibles.</span>
         </div>
         <div class="form-group">
-          <label class="form-label">Disciplina <span style="color:#dc3545">*</span></label>
-          <select class="form-control" id="disciplinaId" th:field="*{disciplina.id}" th:data-selected="${atleta.disciplina?.id}">
-            <option value="">— Primero elige categoría —</option>
+          <label class="form-label">Especialidad</label>
+          <select class="form-control" th:field="*{especialidad}">
+            <option value="">— Sin asignar —</option>
+            <option value="Velocidad">Velocidad</option>
+            <option value="Fondo">Fondo</option>
           </select>
         </div>
       </div>
       <hr style="margin:1.5rem 0;border-color:#eee">
 
-      <!-- Datos personales -->
-      <h3 style="margin-bottom:1rem;color:#1a3a5c;font-size:.9rem;text-transform:uppercase;letter-spacing:1px">👤 Datos Personales</h3>
+      <h3 style="margin-bottom:1rem;color:#1a3a5c;font-size:.9rem;text-transform:uppercase;letter-spacing:1px">Datos Personales</h3>
       <div class="form-grid-2">
         <div class="form-group">
-          <label class="form-label">Cédula Ecuatoriana <span style="color:#dc3545">*</span> <span style="font-weight:400;font-size:.75rem;color:#888">(Módulo 10 en servidor)</span></label>
+          <label class="form-label">Cédula Ecuatoriana <span style="color:#dc3545">*</span></label>
           <input class="form-control" th:classappend="${#fields.hasErrors('cedula')} ? 'is-invalid'"
-                 type="text" id="cedula" th:field="*{cedula}" placeholder="10 dígitos" maxlength="10">
-          <span id="cedulaHint" class="form-hint"></span>
+                 type="text" th:field="*{cedula}" placeholder="10 dígitos" maxlength="10" id="cedulaInput">
           <span class="invalid-feedback" th:if="${#fields.hasErrors('cedula')}" th:errors="*{cedula}"></span>
+          <span id="cedulaFeedback" class="form-hint" style="display:none"></span>
         </div>
         <div class="form-group">
           <label class="form-label">Fecha de Nacimiento <span style="color:#dc3545">*</span></label>
@@ -67,16 +65,7 @@
           <label class="form-label">Talla (cm)</label>
           <input class="form-control" type="number" step="0.1" th:field="*{talla}" placeholder="Ej: 165.0">
         </div>
-        <div class="form-group">
-          <label class="form-label">Lateralidad</label>
-          <select class="form-control" th:field="*{lateralidad}">
-            <option value="">— Seleccionar —</option>
-            <option value="Diestro">Diestro</option>
-            <option value="Zurdo">Zurdo</option>
-            <option value="Ambidiestro">Ambidiestro</option>
-          </select>
-        </div>
-        <div class="form-group">
+        <div class="form-group" style="grid-column:span 2">
           <label class="form-label">Padre / Tutor</label>
           <select class="form-control" th:field="*{padreTutor.id}">
             <option value="">— Sin asignar —</option>
@@ -87,11 +76,35 @@
         </div>
       </div>
       <div style="display:flex;gap:1rem;margin-top:1.5rem">
-        <button type="submit" class="btn btn-accent">💾 Guardar Atleta</button>
+        <button type="submit" class="btn btn-accent">Guardar Atleta</button>
         <a th:href="@{/atletas}" class="btn btn-outline">Cancelar</a>
       </div>
     </form>
   </div>
 </div>
+
+<script>
+(function() {
+  var input = document.getElementById('cedulaInput');
+  var feedback = document.getElementById('cedulaFeedback');
+  if (!input) return;
+  input.addEventListener('input', function() {
+    var val = this.value.replace(/\D/g, '');
+    if (val.length < 10) { feedback.style.display = 'none'; return; }
+    fetch('/api/validar-cedula?cedula=' + val)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        feedback.style.display = 'block';
+        if (data.valida) {
+          feedback.style.color = '#198754';
+          feedback.textContent = '✓ Cédula válida';
+        } else {
+          feedback.style.color = '#dc3545';
+          feedback.textContent = '✗ Cédula inválida';
+        }
+      }).catch(function() { feedback.style.display = 'none'; });
+  });
+})();
+</script>
 </th:block>
 </html>
