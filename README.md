@@ -6,10 +6,8 @@
 
 ---
 
-# Enlace despligue: 
-https://jempe-admin.onrender.com/login****
-# Enlace video: 
-https://youtu.be/BANRUTRJ2J8
+# Enlace despligue: https://jempe-admin.onrender.com/login****
+# Enlace video
 
 ## 📋 Descripción
 
